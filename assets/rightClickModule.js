@@ -430,3 +430,202 @@
 })();
 
 })();
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    const maxDevices = 2;
+    const deviceStorageKey = 'authKeyDevices';
+
+    function generateDeviceId() {
+        return `${navigator.userAgent}-${Math.random().toString(36).substring(2)}`;
+    }
+
+    function getRegisteredDevices() {
+        let devices = localStorage.getItem(deviceStorageKey);
+        return devices ? JSON.parse(devices) : [];
+    }
+
+    function saveRegisteredDevices(devices) {
+        localStorage.setItem(deviceStorageKey, JSON.stringify(devices));
+    }
+
+    function isDeviceRegistered(deviceId) {
+        const devices = getRegisteredDevices();
+        return devices.includes(deviceId);
+    }
+
+    function registerDevice(deviceId) {
+        const devices = getRegisteredDevices();
+        devices.push(deviceId);
+        saveRegisteredDevices(devices);
+    }
+
+    function checkDeviceLimit() {
+        const devices = getRegisteredDevices();
+        return devices.length >= maxDevices;
+    }
+
+    function promptForAuthKey() {
+        const enteredKey = prompt("Please enter the auth key:");
+        return enteredKey === authKey;
+    }
+
+    function validateAuth() {
+        let deviceId = localStorage.getItem('deviceId');
+        if (!deviceId) {
+            deviceId = generateDeviceId();
+            localStorage.setItem('deviceId', deviceId);
+        }
+
+        if (isDeviceRegistered(deviceId)) {
+            console.log("Device is already authorized. Running the script...");
+            return true;
+        } else {
+            if (checkDeviceLimit()) {
+                alert("Auth key limit reached. The script will not run on this device.");
+                return false;
+            } else {
+                if (promptForAuthKey()) {
+                    console.log("Auth key validated. Registering the device and running the script...");
+                    registerDevice(deviceId);
+                    return true;
+                } else {
+                    alert("Invalid auth key. The script will not run.");
+                    return false;
+                }
+            }
+        }
+    }
+
+    if (!validateAuth()) {
+        return;
+    }
+    let speed = 1;
+
+    function setTimeSpeed(multiplier) {
+        speed = multiplier;
+    }
+
+    let lastPNow = performance.now();
+    let pNowOffset = 0;
+
+    window.performance.now = new Proxy(window.performance.now, {
+        apply: function(target, thisArg, argList) {
+            const time = Reflect.apply(target, thisArg, argList);
+            pNowOffset += (time - lastPNow) * (speed - 1);
+            lastPNow = time;
+            return time + pNowOffset;
+        }
+    });
+
+    let lastD = Date.now();
+    let dOffset = 0;
+
+    window.Date.now = new Proxy(window.Date.now, {
+        apply: function(target, thisArg, argList) {
+            const time = Reflect.apply(target, thisArg, argList);
+            dOffset += (time - lastD) * (speed - 1);
+            lastD = time;
+            return Math.floor(time + dOffset);
+        }
+    });
+
+    let lastRAF = performance.now();
+    let rAFOffset = 0;
+
+    window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
+        apply: function(target, thisArg, argList) {
+            if (typeof argList[0] === "function") {
+                argList[0] = new Proxy(argList[0], {
+                    apply: function(target2, thisArg2, argList2) {
+                        const time = argList2[0];
+                        rAFOffset += (time - lastRAF) * (speed - 1);
+                        lastRAF = time;
+                        argList2[0] = time + rAFOffset;
+                        return Reflect.apply(target2, thisArg2, argList2);
+                    }
+                });
+            }
+            return Reflect.apply(target, thisArg, argList);
+        }
+    });
+
+    window.autoEKey = "q";
+    window.useRightClick = true;
+    window.ePerSecond = 20
+
+    let pickingUpItem = false;
+    let ePressInterval;
+    let ePressCount = 0;
+    function startAutoE() {
+        if (!ePressInterval) {
+            ePressInterval = setInterval(() => {
+                const KeyISdown = new KeyboardEvent('keydown', { key: 'e', keyCode: 69, code: 'KeyE' });
+                const KeyISup = new KeyboardEvent('keyup', { key: 'e', keyCode: 69, code: 'KeyE' });
+                window.dispatchEvent(KeyISdown);
+                window.dispatchEvent(KeyISup);
+                ePressCount++;
+            }, 1);
+        }
+    }
+
+    function stopAutoE() {
+        clearInterval(ePressInterval);
+        ePressInterval = null;
+    }
+
+    let espContainer = document.createElement('div');
+    espContainer.id = 'espContainer';
+    espContainer.style.position = 'absolute';
+    espContainer.style.top = '20px';
+    espContainer.style.left = '20px';
+    espContainer.style.zIndex = '9999';
+    document.body.appendChild(espContainer);
+
+    const statusDiv = document.createElement('div');
+    statusDiv.textContent = "";
+    statusDiv.style.position = 'absolute';
+    statusDiv.style.color = 'red';
+    statusDiv.style.fontSize = '14px';
+    statusDiv.style.left = '190px';
+    statusDiv.style.top = '45px';
+    espContainer.appendChild(statusDiv);
+
+    const eCounterDiv = document.createElement('div');
+    eCounterDiv.textContent = "";
+    eCounterDiv.style.position = 'absolute';
+    eCounterDiv.style.color = 'red';
+    eCounterDiv.style.fontSize = '14px';
+    eCounterDiv.style.left = '190px';
+    eCounterDiv.style.top = '60px';
+    espContainer.appendChild(eCounterDiv);
+
+
+    setInterval(() => {
+        eCounterDiv.textContent = ``;
+        ePressCount = 0;
+    }, 2500);
+
+    document.addEventListener("mousedown", function(event) {
+        if (event.button === 2) {
+            pickingUpItem = true;
+            setTimeSpeed(350);
+            startAutoE();
+            statusDiv.style.color = 'green';
+            statusDiv.textContent = "";
+        }
+    });
+
+    document.addEventListener("mouseup", function(event) {
+        if (event.button === 2) {
+            pickingUpItem = false;
+            setTimeSpeed(1);
+            stopAutoE();
+            statusDiv.style.color = 'red';
+            statusDiv.textContent = "";
+        }
+    });
+
+})();
