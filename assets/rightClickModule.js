@@ -220,6 +220,7 @@
     };
     window.addEventListener('load', initOptimizations);
 })();
+
 (function() {
     'use strict';
 (function () {
