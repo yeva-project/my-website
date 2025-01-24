@@ -430,7 +430,6 @@
 })();
 
 })();
-// ==/UserScript==
 
 (function() {
     'use strict';
