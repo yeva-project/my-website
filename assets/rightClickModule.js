@@ -206,6 +206,7 @@
 })();
 
 })();
+
 (function() {
     'use strict';
 
@@ -428,6 +429,7 @@
     };
     window.addEventListener('load', initOptimizations);
 })();
+
 (function() {
     'use strict';
 
@@ -623,5 +625,4 @@
             statusDiv.textContent = "";
         }
     });
-
 })();
