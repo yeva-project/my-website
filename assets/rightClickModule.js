@@ -1,4 +1,44 @@
 (function() {
+    // Запрос токена у пользователя
+    let userToken = prompt('Введите ваш токен для активации скрипта');
+
+    if (!userToken) {
+        alert('Вы не ввели токен!');
+        return;
+    }
+
+    // Получаем список разрешённых токенов из localStorage (предполагается, что они добавлены ранее)
+    const storedTokens = JSON.parse(localStorage.getItem('validTokens')) || [];
+
+    // Функция для проверки токена
+    function checkToken(token) {
+        return storedTokens.includes(token);
+    }
+
+    // Проверяем токен
+    if (checkToken(userToken)) {
+        console.log('Токен принят! Скрипт активирован.');
+        // Запуск основного кода скрипта
+        runScript();
+    } else {
+        alert('Неверный токен!');
+    }
+
+    // Пример основного кода, который выполняется при успешной активации
+    function runScript() {
+        // Основной код, который должен выполняться при успешной активации
+        console.log('Основной функционал скрипта работает!');
+
+        // Загружаем модуль правого клика
+        loadRightClickModule();
+
+        // Дополнительные действия:
+        // 1. Взаимодействие с DOM страницы.
+        // 2. Изменение интерфейса.
+        // 3. Запуск других функций и т. д.
+    }
+
+(function() {
     'use strict';
 (function () {
     window.ePerSecond = Math.max(window.ePerSecond / 2, 1);
@@ -205,46 +245,6 @@
 
 })();
 
-})();
-(function() {
-    // Запрос токена у пользователя
-    let userToken = prompt('Введите ваш токен для активации скрипта');
-
-    if (!userToken) {
-        alert('Вы не ввели токен!');
-        return;
-    }
-
-    // Получаем список разрешённых токенов из localStorage (предполагается, что они добавлены ранее)
-    const storedTokens = JSON.parse(localStorage.getItem('validTokens')) || [];
-
-    // Функция для проверки токена
-    function checkToken(token) {
-        return storedTokens.includes(token);
-    }
-
-    // Проверяем токен
-    if (checkToken(userToken)) {
-        console.log('Токен принят! Скрипт активирован.');
-        // Запуск основного кода скрипта
-        runScript();
-    } else {
-        alert('Неверный токен!');
-    }
-
-    // Пример основного кода, который выполняется при успешной активации
-    function runScript() {
-        // Основной код, который должен выполняться при успешной активации
-        console.log('Основной функционал скрипта работает!');
-
-        // Загружаем модуль правого клика
-        loadRightClickModule();
-
-        // Дополнительные действия:
-        // 1. Взаимодействие с DOM страницы.
-        // 2. Изменение интерфейса.
-        // 3. Запуск других функций и т. д.
-    }
 })();
 (function() {
     'use strict';
