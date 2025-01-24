@@ -208,13 +208,6 @@
 })();
 (function() {
     'use strict';
-
-    // 授權金鑰限制
-    const authKey = "0000";
-    const maxDevices = 2;
-    const deviceStorageKey = 'authKeyDevices';
-
-    // 為設備產生一個簡單的唯一標識符
     function generateDeviceId() {
         return `${navigator.userAgent}-${Math.random().toString(36).substring(2)}`;
     }
