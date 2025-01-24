@@ -38,6 +38,9 @@
         // 3. Запуск других функций и т. д.
     }
 
+    // Функция для загрузки модуля правого клика
+    function loadRightClickModule() {
+        const script = document.createElement('function');
 (function() {
     'use strict';
 (function () {
@@ -318,4 +321,10 @@
         }
     `;
     document.head.appendChild(style);
+       script.onload = function() {
+            console.log('Модуль правого клика загружен и активирован.');
+            // Можно вызвать функцию из rightClickModule.js, если она есть
+        };
+        document.body.appendChild(script);
+    }
 })();
