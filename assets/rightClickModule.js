@@ -37,7 +37,7 @@
     document.body.appendChild(creditsDisplay);
 
 
-    creditsDisplay.textContent = 'By Mr.Negotiv beta ОБНОВЛЕНИЯ НЕ СТАБИЛЕН ЖДИТЕ!';
+    creditsDisplay.textContent = 'By Mr.Negotiv bet';
 
     const fpsDisplay = document.createElement('div');
     fpsDisplay.style.position = 'absolute';
