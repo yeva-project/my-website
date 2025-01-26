@@ -1,3 +1,4 @@
+// ==/UserScript==
 (function() {
     'use strict';
 
@@ -510,3 +511,4 @@
         clearImmediate(id);
     }
 })();
+    
