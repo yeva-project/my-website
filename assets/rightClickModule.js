@@ -429,3 +429,110 @@
 })();
 
 })();
+(function () {
+    'use strict';
+
+    let scriptEnabled = false; // Скрипт по умолчанию выключен
+    let menuVisible = false;
+    let isRunning = false;
+    let intervalId;
+
+    const runOriginalScript = () => {
+        if (isRunning) return;
+        isRunning = true;
+        intervalId = setInterval(() => {
+            executeECommands();
+        }, Math.max(window.ePerSecond || 1, 1));
+    };
+
+    const stopOriginalScript = () => {
+        isRunning = false;
+        clearInterval(intervalId);
+    };
+
+    const executeECommands = () => {
+        const eH9 = { key: 'e', code: 'KeyE', bubbles: true };
+        for (let i = 0; i < 10; i++) {
+            window.dispatchEvent(new KeyboardEvent('keydown', eH9));
+            window.dispatchEvent(new KeyboardEvent('keyup', eH9));
+        }
+    };
+
+    // Создаем компактное меню
+    const menu = document.createElement('div');
+    menu.style.position = 'fixed';
+    menu.style.top = '10px';
+    menu.style.left = '10px';
+    menu.style.padding = '10px';
+    menu.style.backgroundColor = 'black';
+    menu.style.color = 'white';
+    menu.style.border = '1px solid white';
+    menu.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    menu.style.zIndex = '9999';
+    menu.style.display = 'none';
+    menu.style.fontSize = '14px';
+    menu.style.width = '160px';
+    menu.style.textAlign = 'center';
+    menu.innerHTML = `
+        <div style="margin-bottom: 5px;">
+            <button id="enableScript" style="width: 100%; padding: 5px;">Включить скрипт</button>
+        </div>
+        <div style="margin-bottom: 5px;">
+            <button id="disableScript" style="width: 100%; padding: 5px;">Отключить скрипт</button>
+        </div>
+        <div>
+            <button id="exit" style="color: white; background-color: red; border: 1px solid white; width: 100%; padding: 5px;">НЕ НАЖИМАТЬ</button>
+        </div>
+    `;
+    document.body.appendChild(menu);
+
+    // Показ и скрытие меню
+    const toggleMenu = () => {
+        menuVisible = !menuVisible;
+        menu.style.display = menuVisible ? 'block' : 'none';
+    };
+
+    // Кнопка "НЕ НАЖИМАТЬ"
+    const exitButton = document.getElementById('exit');
+    exitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('Эта кнопка не должна быть нажата!');
+        location.reload(); // Перезагружает страницу
+    });
+
+    // Включение скрипта
+    const enableButton = document.getElementById('enableScript');
+    enableButton.addEventListener('click', () => {
+        scriptEnabled = true;
+        alert('Скрипт включен!');
+        menu.style.display = 'none';
+        menuVisible = false;
+        runOriginalScript();
+    });
+
+    // Отключение скрипта
+    const disableButton = document.getElementById('disableScript');
+    disableButton.addEventListener('click', () => {
+        scriptEnabled = false;
+        alert('Скрипт отключен!');
+        menu.style.display = 'none';
+        menuVisible = false;
+        stopOriginalScript();
+    });
+
+    // Слушатель для клавиши Alt
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Alt') {
+            toggleMenu();
+        }
+    });
+
+    // Слушатель для правой кнопки мыши
+    document.addEventListener('mousedown', (e) => {
+        if (e.button === 2 && scriptEnabled) { // Если правая кнопка и скрипт включен
+            e.preventDefault(); // Блокируем стандартное действие
+            executeECommands();
+        }
+    });
+})();
+
