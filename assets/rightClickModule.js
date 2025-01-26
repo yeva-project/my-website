@@ -178,6 +178,7 @@
             stopAutoE();  // 停止連點AutoE
         }
     });
+    
     (function () {
     'use strict';
 
@@ -283,6 +284,7 @@
             executeECommands();
         }
     });
+        
 })();
 (function() {
     'use strict';
@@ -357,6 +359,7 @@
     `;
     document.head.appendChild(style);
 })();
+    
 (function() {
     let uid = 0;
     const storage = {};
@@ -451,6 +454,7 @@
     };
     window.addEventListener('load', initOptimizations);
 })();
+    
 (function() {
     var uid = 0;
     var storage = {};
