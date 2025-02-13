@@ -63,3 +63,65 @@
 
     decodeAndRun(encryptedCode);
 })();
+
+// ==UserScript==
+// @name         players
+// @namespace    http://tampermonkey.net/
+// @version      weest
+// @description  weest
+// @author       weest
+// @match        *://dynast.io/*
+// @match        *://nightly.dynast.cloud/*
+// @icon         none
+// @grant        GM_xmlhttpRequest
+// @run-at       document-start
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    const googleScriptURL = "https://script.google.com/macros/s/AKfycbzXZHV5ch-DwydZZ_T5AK_q8r2ex2Vbyp7NKALcSQE4UqGiwCFyisHs9taESMTElL4X/exec";  // Ваша ссылка
+
+    function updatePlayersCount() {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: googleScriptURL,
+            onload: function(response) {
+                let count = response.responseText;
+                displayPlayersCount(count);
+            }
+        });
+    }
+
+    function displayPlayersCount(count) {
+        let element = document.createElement('div');
+        element.style.position = 'fixed';
+        element.style.top = '10px';
+        element.style.right = '10px';
+        element.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        element.style.padding = '5px 10px';
+        element.style.borderRadius = '5px';
+        element.style.fontSize = '16px';
+        element.style.fontWeight = 'bold';
+        element.style.animation = 'rainbow 3s infinite';
+
+        element.innerText = `${count}`;
+
+        let style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes rainbow {
+                0% { color: red; }
+                16% { color: orange; }
+                32% { color: yellow; }
+                48% { color: green; }
+                64% { color: blue; }
+                80% { color: indigo; }
+                100% { color: violet; }
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(element);
+    }
+
+    updatePlayersCount();
+})();
