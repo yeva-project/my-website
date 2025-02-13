@@ -64,7 +64,7 @@
 
 
   const toggleElement = document.createElement("div");
-  toggleElement.innerHTML = "Auto E Nego";
+  toggleElement.innerHTML = "𝒜𝓊𝓉𝑜 𝐸 𝓌𝑒𝑒𝓈𝓉";
   Object.assign(toggleElement.style, {
     color: "black",
     position: "fixed",
@@ -305,13 +305,13 @@
     menu.style.textAlign = 'center';
     menu.innerHTML = `
         <div style="margin-bottom: 5px;">
-            <button id="enableScript" style="width: 100%; padding: 5px;">Включить скрипт</button>
+            <button id="enableScript" style="width: 100%; padding: 5px;">𝔈𝔫𝔞𝔟𝔩𝔢 𝔰𝔠𝔯𝔦𝔭𝔱</button>
         </div>
         <div style="margin-bottom: 5px;">
-            <button id="disableScript" style="width: 100%; padding: 5px;">Отключить скрипт</button>
+            <button id="disableScript" style="width: 100%; padding: 5px;">𝔇𝔦𝔰𝔞𝔟𝔩𝔢 𝔰𝔠𝔯𝔦𝔭𝔱</button>
         </div>
         <div>
-            <button id="exit" style="color: white; background-color: red; border: 1px solid white; width: 100%; padding: 5px;">НЕ НАЖИМАТЬ</button>
+            <button id="exit" style="color: white; background-color: red; border: 1px solid white; width: 100%; padding: 5px;">𝘸єє𝔰𝕥_𝓫𝓮𝓴</button>
         </div>
     `;
     document.body.appendChild(menu);
@@ -326,7 +326,7 @@
     const exitButton = document.getElementById('exit');
     exitButton.addEventListener('click', (e) => {
         e.preventDefault();
-        alert('Эта кнопка не должна быть нажата!');
+        alert('телочку на веранде оу ес');
         location.reload();
     });
 
@@ -430,7 +430,7 @@
 
     document.body.appendChild(creditsDisplay);
 
-    creditsDisplay.innerHTML = 'By Mr.Negotiv beta v1 | <a href="https://docs.google.com/spreadsheets/d/1bqLvzatj1TBfln0rGBf8X96T_UzXUhTykiiM9Y6cLVU/edit?gid=1695479590#gid=1695479590" target="_blank" style="color: white; text-decoration: underline;">Инструкция</a>';
+    creditsDisplay.innerHTML = 'weest_bek | <a href="https://docs.google.com/spreadsheets/d/1bqLvzatj1TBfln0rGBf8X96T_UzXUhTykiiM9Y6cLVU/edit?gid=1695479590#gid=1695479590" target="_blank" style="color: white; text-decoration: underline;">Инструкция</a>';
 
     const fpsDisplay = document.createElement('div');
     fpsDisplay.style.position = 'absolute';
