@@ -1,11 +1,3 @@
-// ==UserScript==
-// @name         am am am
-// @namespace    none
-// @version      24141424
-// @description  none
-// @author       none
-// @grant        none
-// ==/UserScript==
 (function() {
     'use strict';
 
@@ -18,15 +10,6 @@
 
     decodeAndRun(encryptedCode);
 })();
-
-// ==UserScript==
-// @name         не читать геи
-// @namespace    none
-// @version      none
-// @description  хз хз!
-// @author       нит
-// @grant        none
-// ==/UserScript==
 
 (function() {
     'use strict';
@@ -41,16 +24,6 @@
     decodeAndRun(encryptedCode);
 })();
 
-// ==UserScript==
-// @name         гей
-// @namespace    none
-// @version      none
-// @description  none
-// @author       You
-// @match        none
-// @grant        none
-// ==/UserScript==
-
 (function() {
     'use strict';
 
@@ -63,19 +36,6 @@
 
     decodeAndRun(encryptedCode);
 })();
-
-// ==UserScript==
-// @name         players
-// @namespace    http://tampermonkey.net/
-// @version      weest
-// @description  weest
-// @author       weest
-// @match        *://dynast.io/*
-// @match        *://nightly.dynast.cloud/*
-// @icon         none
-// @grant        GM_xmlhttpRequest
-// @run-at       document-start
-// ==/UserScript==
 
 (function() {
     'use strict';
