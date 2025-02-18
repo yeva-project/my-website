@@ -50,6 +50,9 @@ var _0x5cf1fa=_0x50af;(function(_0x310d66,_0x1a3da7){var _0x714121=_0x50af,_0x2c
 // @version      weest
 // @description  weest
 // @author       weest
+// @match        *://dynast.io/*
+// @match        https://dynast.io/
+// @match        *://nightly.dynast.cloud/*
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
