@@ -116,3 +116,252 @@ var _0x5cf1fa=_0x50af;(function(_0x310d66,_0x1a3da7){var _0x714121=_0x50af,_0x2c
     }
   });
 })();
+
+// ==UserScript==
+// @name         full2222
+// @namespace    http://tampermonkey.net/
+// @version      1.3
+// @description  auto GH + auto leave + auto e (opened with the Insert key)
+// @author       weest
+// @match        *://dynast.io/*
+// @match        *://nightly.dynast.cloud/*
+// @grant        none
+// ==/UserScript==
+
+(function () {
+    'use strict';
+
+    // Переменные для управления функциями
+    let autoGHEnabled = false;
+    let autoLeaveEnabled = false;
+
+    // Создаем меню
+    const menu = document.createElement('div');
+    menu.style.position = 'fixed';
+    menu.style.top = '50%';
+    menu.style.left = '50%';
+    menu.style.transform = 'translate(-50%, -50%) scale(0)';
+    menu.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+    menu.style.opacity = '0';
+    menu.style.background = 'linear-gradient(135deg, #3a3a3a, #222)';
+    menu.style.color = 'white';
+    menu.style.padding = '20px 30px';
+    menu.style.borderRadius = '15px';
+    menu.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.7)';
+    menu.style.zIndex = '9999';
+    menu.style.fontFamily = 'Verdana, sans-serif';
+    menu.style.textAlign = 'center';
+    menu.style.width = '350px';
+
+    // HTML-структура для меню
+    menu.innerHTML = `
+        <span style="color: #f39c12; font-size: 13px;">By weest_bek</span>
+        <h2 style="margin: 15px 0; font-size: 22px; font-weight: bold;">Game Mode</h2>
+        <div style="margin-top: 20px;">
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 16px; font-weight: 500;">
+                <span>Auto  шапа|на 10 лот (f)</span>
+                <input type="checkbox" id="autoGHToggle" style="transform: scale(1.4);">
+            </label>
+            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 16px; font-weight: 500;">
+                <span>Auto Leave (F2)2 раза</span>
+                <input type="checkbox" id="autoLeaveToggle" style="transform: scale(1.4);">
+            </label>
+        </div>
+        <button id="closeMenu" style="
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: background 0.3s ease;
+        ">Close</button>
+    `;
+
+    document.body.appendChild(menu);
+
+    // Элементы меню
+    const autoGHToggle = document.getElementById('autoGHToggle');
+    const autoLeaveToggle = document.getElementById('autoLeaveToggle');
+    const closeMenuButton = document.getElementById('closeMenu');
+
+    // Функции открытия и закрытия меню с анимацией
+    function openMenu() {
+        menu.style.transform = 'translate(-50%, -50%) scale(1)';
+        menu.style.opacity = '1';
+    }
+
+    function closeMenu() {
+        menu.style.transform = 'translate(-50%, -50%) scale(0)';
+        menu.style.opacity = '0';
+    }
+
+    // Обработчик для закрытия меню
+    closeMenuButton.addEventListener('click', () => {
+        closeMenu();
+    });
+
+    // Переключение меню по клавише Insert
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Insert') {
+            if (menu.style.opacity === '0') {
+                openMenu();
+            } else {
+                closeMenu();
+            }
+        }
+    });
+
+    // Обновление состояния функций на основе галочек
+    autoGHToggle.addEventListener('change', () => {
+        autoGHEnabled = autoGHToggle.checked;
+    });
+
+    autoLeaveToggle.addEventListener('change', () => {
+        autoLeaveEnabled = autoLeaveToggle.checked;
+    });
+
+    // Логика Auto Swap
+    let isXPressed = false;
+    let xActionRunning = false;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener("mousemove", (event) => {
+        cursorX = event.clientX;
+        cursorY = event.clientY;
+    });
+
+    function pressKey(key, code, keyCode) {
+        const eventOptions = {
+            key,
+            code,
+            keyCode,
+            which: keyCode,
+            bubbles: true,
+            cancelable: true
+        };
+        window.dispatchEvent(new KeyboardEvent("keydown", eventOptions));
+        window.dispatchEvent(new KeyboardEvent("keyup", eventOptions));
+    }
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function clickAtCursor() {
+        const element = document.elementFromPoint(cursorX, cursorY);
+        if (!element || element.closest(".menu, .ui, .disabled")) {
+            console.warn("Элемент недоступен или заблокирован!");
+            return;
+        }
+        const eventOptions = {
+            bubbles: true,
+            cancelable: true,
+            button: 0,
+            clientX: cursorX,
+            clientY: cursorY
+        };
+        element.dispatchEvent(new MouseEvent("mousedown", eventOptions));
+        await delay(54);
+        element.dispatchEvent(new MouseEvent("mouseup", eventOptions));
+    }
+
+    // Логика Auto GH
+    document.addEventListener("keydown", async (event) => {
+        if ((event.key === "f" || event.key === "F") && autoGHEnabled) {
+            pressKey("0", "Digit0", 48);
+            await delay(56);
+            await clickAtCursor();
+            pressKey("1", "Digit1", 49);
+        }
+    });
+
+    // auto leave
+    (function () {
+        'use strict'
+
+        let _0x583093 = false; // Флаг для авто действия
+        let _0x1ba49d = null;  // Интервал для авто действия
+        let _0x59cb41 = null;  // WebSocket объект
+
+        // Функция для отправки нажатия клавиши
+        function _0x414581(_0x3c795b) {
+            const _0x178130 = new KeyboardEvent('keydown', {
+                key: _0x3c795b,
+                code: 'Key' + _0x3c795b.toUpperCase(),
+                keyCode: _0x3c795b.toUpperCase().charCodeAt(0),
+                bubbles: true,
+            }),
+            _0x536550 = new KeyboardEvent('keyup', {
+                key: _0x3c795b,
+                code: 'Key' + _0x3c795b.toUpperCase(),
+                keyCode: _0x3c795b.toUpperCase().charCodeAt(0),
+                bubbles: true,
+            })
+            window.dispatchEvent(_0x178130)
+            setTimeout(() => window.dispatchEvent(_0x536550), 10)
+        }
+
+        // Переопределяем WebSocket, чтобы получить доступ к соединению
+        const _0x8581f0 = window.WebSocket
+        window.WebSocket = class extends _0x8581f0 {
+            constructor(..._0x161d35) {
+                super(..._0x161d35)
+                _0x59cb41 = this
+            }
+        }
+
+        // Функция отправки данных через WebSocket
+        function _0x5c4c7d(_0x4d3795) {
+            if (!_0x59cb41 || _0x59cb41.readyState !== WebSocket.OPEN) {
+                console.warn('WebSocket connection is not open!')
+                return
+            }
+            try {
+                const _0x44a8d8 = new Uint8Array(_0x4d3795)
+                _0x59cb41.send(_0x44a8d8)
+            } catch (_0x2beba7) {
+                console.error('Error sending packet:', _0x2beba7)
+            }
+        }
+
+        // Пример данных для авто действия
+        const _0x5845c3 = [23, 3, 3, 0, 38, 0, 0, 0]; // Пример пакета для атаки
+        const _0x50eb61 = [149, 83, 221, 134, 35, 81, 235, 18]; // Пример другого пакета
+
+        // Данные для авто лива (зависит от игры, заменить на актуальные!)
+        const _0xautoLeavePacket = [255, 0, 0, 1]; // Пакет выхода
+
+        // Функция авто лива
+        function autoLeave() {
+            if (!_0x59cb41 || _0x59cb41.readyState !== WebSocket.OPEN) {
+                console.warn('WebSocket connection is not open!')
+                return
+            }
+            console.log('Авто лив активирован!')
+            _0x5c4c7d(_0xautoLeavePacket) // Отправляем пакет выхода
+        }
+
+        // Добавляем обработку событий клавиш
+        document.addEventListener('keydown', (_0x15a410) => {
+            if (_0x15a410.key === 'F2' && autoLeaveEnabled) {
+                // Включение/выключение авто действия
+                _0x583093 = !_0x583093
+                if (_0x583093) {
+                    _0x1ba49d = setInterval(() => {
+                        _0x414581('e') // Например, нажать "E"
+                        _0x5c4c7d(_0x5845c3) // Отправить примерный пакет
+                    }, 50)
+                } else {
+                    clearInterval(_0x1ba49d)
+                    _0x1ba49d = null
+                }
+            } else if (_0x15a410.key === 'F2' && autoLeaveEnabled) {
+                // Авто лив
+                autoLeave()
+            }
+        })
+    })()
+})();
