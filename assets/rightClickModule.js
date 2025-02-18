@@ -38,7 +38,7 @@
 // ==/UserScript==
 
 
-window.autoResetKey = "r";
+window.autoResetKey = ".";
 window.ePerSecond = 400;
 window.autoekey = ' '; // auto e 2
 
