@@ -25,11 +25,11 @@
 })();
 
 // ==UserScript==
-// @name         Dynastio Waza auto E
+// @name         Dynast
 // @namespace    http://tampermonkey.net/
 // @version      6
-// @description  Waza Auto E
-// @author       Breno
+// @description  weest
+// @author       weest
 // @match        *://dynast.io/*
 // @match        https://dynast.io/
 // @match        *://nightly.dynast.cloud/*
@@ -37,7 +37,6 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
-// Default configs [Remove lag / lower ms / 1 auto e key = ²]
 
 window.autoResetKey = ".";
 window.ePerSecond = 400;
